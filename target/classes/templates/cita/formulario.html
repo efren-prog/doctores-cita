@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${cita?.id != null} ? 'Editar Cita' : 'Nueva Cita'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div th:if="${param.exito}" class="alert alert-success">
+        <span th:text="${param.exito}"></span>
+    </div>
+
+    <form th:action="@{/citas}" th:object="${cita}" method="post">
+        <!-- Campo ID -->
+        <input type="hidden" th:name="id" th:value="${cita?.id}">
+
+        <!-- Campo Paciente -->
+        <div class="mb-3">
+            <label class="form-label">Paciente:</label>
+            <input type="text" class="form-control"
+                   th:name="nombrePaciente"
+                   th:value="${cita?.nombrePaciente}"
+                   required>
+        </div>
+
+        <!-- Campo Doctor -->
+        <div class="mb-3">
+            <label class="form-label">Doctor:</label>
+            <select class="form-select" th:name="doctor.id" required>
+                <option value="">Seleccione doctor</option>
+                <option th:each="doctor : ${doctores}"
+                        th:value="${doctor.id}"
+                        th:text="${doctor.nombre} + ' ' + ${doctor.apellidoPaterno}"
+                        th:selected="${cita?.doctor?.id == doctor.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Campo Consultorio -->
+        <div class="mb-3">
+            <label class="form-label">Consultorio:</label>
+            <select class="form-select" th:name="consultorio.id" required>
+                <option value="">Seleccione consultorio</option>
+                <option th:each="consultorio : ${consultorios}"
+                        th:value="${consultorio.id}"
+                        th:text="'Consultorio ' + ${consultorio.numero}"
+                        th:selected="${cita?.consultorio?.id == consultorio.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Campo Fecha/Hora -->
+        <div class="mb-3">
+            <label class="form-label">Fecha y Hora:</label>
+            <input type="datetime-local" class="form-control"
+                   th:name="horario"
+                   th:value="${#temporals.format(cita?.horario, 'yyyy-MM-dd\'T\'HH:mm')}"
+                   required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a th:href="@{/citas}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>
