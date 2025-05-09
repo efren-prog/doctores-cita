@@ -38,7 +38,7 @@ public class CitaController {
     }
 
 
-    @GetMapping("/")
+    @GetMapping("/listarCitas")
     public String listarCitas(Model model) {
         List<Cita> citas = citaService.listarTodas();
         System.out.println("Citas encontradas: " + citas.size());
@@ -46,7 +46,7 @@ public class CitaController {
         return "citas/lista";
     }
 
-    @GetMapping
+    @GetMapping("listarDoctores")
     public String listarDoctores(Model model) {
         model.addAttribute("doctores", doctorService.listarTodos());
         return "doctores/lista";
